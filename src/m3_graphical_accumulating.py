@@ -163,14 +163,13 @@ def draw_lines(n, point, window):
               from  (pY - 100)  to  (pY + 100),
               where pY is the y-coordinate of the given rg.Point.
       Must  ** render **     but   ** NOT close **   the window.
-
     Type hints:
       :type n: int
       :type point: rg.Point
       :type window: rg.RoseWindow
     """
     # -------------------------------------------------------------------------
-    # TODO: 3. Implement and test this function.
+    # DONE: 3. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -183,6 +182,11 @@ def draw_lines(n, point, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ###########################################################################
     # -------------------------------------------------------------------------
+    for k in range(n):
+        point2 = rg.Point(point.x+100, (point.y-100+k*(200/(n-1))))
+        line = rg.Line(point,point2)
+        line.attach_to(window)
+    window.render()
 
 
 # -----------------------------------------------------------------------------
