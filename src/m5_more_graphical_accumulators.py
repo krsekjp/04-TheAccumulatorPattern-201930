@@ -230,6 +230,15 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ###########################################################################
     # -------------------------------------------------------------------------
+    radius_left = (rectangle.corner_1.y - rectangle.corner_2.y)/2
+    radius_up = (rectangle.corner_1.x - rectangle.corner_2.x)/2
+
+    # circles going left
+    center_rectangle = rectangle.get_center()
+    left_edge = rg.Point((center_rectangle.x - radius_up), center_rectangle.y)
+    for k in range(m):
+        center_circle_up = rg.Point(((left_edge - radius_left) - 2*k*radius_left), left_edge.y)
+
 
 
 def run_test_draw_lines_from_rectangles():
