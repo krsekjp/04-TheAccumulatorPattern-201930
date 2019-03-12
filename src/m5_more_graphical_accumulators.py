@@ -13,7 +13,7 @@ Authors: David Mutchler, Vibha Alangar, Matt Boutell, Dave Fisher, Mark Hays,
 """  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
-
+import math
 
 # -----------------------------------------------------------------------------
 # Students: As you work each of these problems, ask yourself:
@@ -131,7 +131,7 @@ def run_test_draw_circles_from_rectangle():
     print('--------------------------------------------------')
 
     # -------------------------------------------------------------------------
-    # TODO: 3. Implement this TEST function.
+    # DONE: 3. Implement this TEST function.
     #   It TESTS the  draw_circles_from_rectangle  function
     #   defined below.  Include at least **   3   ** tests, of which
     #      ***  at least TWO tests are on ONE window and
@@ -145,7 +145,7 @@ def run_test_draw_circles_from_rectangle():
     # -------------------------------------------------------------------------
     title = 'Tests 1 and 2 of DRAW_SQUARES_FROM_CIRCLE: '
     title = title + ' 7 little squares from green circle, 4 big squares'
-    window1 = rg.RoseWindow(720, 500, title)
+    window1 = rg.RoseWindow(720,500,title)
 
     # Test 1:
     rectangle = rg.Rectangle(rg.Point(400,250),rg.Point(440,325))
@@ -217,7 +217,7 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
       :type window: rg.RoseWindow
     """
     # -------------------------------------------------------------------------
-    # TODO: 4. Implement and test this function.
+    # DONE: 4. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -230,16 +230,32 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ###########################################################################
     # -------------------------------------------------------------------------
-    radius_left = (rectangle.corner_1.y - rectangle.corner_2.y)/2
-    radius_up = (rectangle.corner_1.x - rectangle.corner_2.x)/2
+
+    # draws rectangle
+    rectangle.attach_to(window)
+
+    radius_left = math.fabs((rectangle.corner_1.y - rectangle.corner_2.y))/2
+    radius_up = math.fabs((rectangle.corner_1.x - rectangle.corner_2.x))/2
+
+    center_rectangle = rectangle.get_center()
 
     # circles going left
-    center_rectangle = rectangle.get_center()
     left_edge = rg.Point((center_rectangle.x - radius_up), center_rectangle.y)
     for k in range(m):
-        center_circle_up = rg.Point(((left_edge - radius_left) - 2*k*radius_left), left_edge.y)
+        center_circle_left = rg.Point(((left_edge.x - radius_left) - 2*k*radius_left), left_edge.y)
+        circle_left = rg.Circle(center_circle_left, radius_left)
+        circle_left.fill_color = rectangle.fill_color
+        circle_left.attach_to(window)
 
+    # circles going up
+    top_edge = rg.Point(center_rectangle.x, (center_rectangle.y - radius_left))
+    for k in range(n):
+        center_circle_top = rg.Point(top_edge.x, (top_edge.y - radius_up)-2*k*radius_up)
+        circle_top = rg.Circle(center_circle_top, radius_up)
+        circle_top.outline_color = rectangle.outline_color
+        circle_top.attach_to(window)
 
+    window.render()
 
 def run_test_draw_lines_from_rectangles():
     """ Tests the   draw_lines_from_rectangles  function. """
@@ -318,7 +334,7 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
       :type window: rg.RoseWindow
       """
     # -------------------------------------------------------------------------
-    # TODO: 5. Implement and test this function.
+    # DONE: 5. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -331,6 +347,27 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ###########################################################################
     # -------------------------------------------------------------------------
+    rectangle1.attach_to(window)
+    rectangle2.attach_to(window)
+
+    # identifies center of rectangles
+    point1 = rectangle1.get_center()
+    point2 = rectangle2.get_center()
+
+    # establish changing variables
+    x_change = - math.fabs((point1.x - rectangle1.corner_1.x))
+    y_change = math.fabs((point1.y - rectangle1.corner_1.y))
+
+
+    for k in range(n):
+        line = rg.Line(rg.Point((point1.x+k*x_change),(point1.y+k*y_change)), rg.Point((point2.x+k*x_change),(point2.y+k*y_change)))
+        line.thickness = 5
+        if k % 2 == 0:
+            line.color = rectangle1.outline_color
+        else:
+            line.color = rectangle2.outline_color
+        line.attach_to(window)
+        window.render()
 
 
 # -----------------------------------------------------------------------------
